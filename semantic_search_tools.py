@@ -11,8 +11,6 @@ class SemanticSearchTool(BaseTool):
     name: str ="Search database and table schemas tool"
     description: str = ("Useful to search database and table schemas from vector DB, "
                         "about a given question and return relevant database andtable schemas")
-    #client: ClientAPI = None
-    #collection: Collection = None
     client: Any = None
     collection: Any = None
     tokenizer: Any = None
@@ -22,21 +20,22 @@ class SemanticSearchTool(BaseTool):
     
     def __init__(self, n_results=10, **kwargs):
         super().__init__(**kwargs)
-        db_path = os.environ.get('CHROMA_STORAGE', 'chroma_db')
-        collection_name = os.environ.get('CHROMA_COLLECTION', 'spider-schemas')
+        db_path = kwargs.get('chroma_db_path', os.environ.get('CHROMA_STORAGE', 'chroma_db'))
+        collection_name = kwargs.get('chroma_collection', os.environ.get('CHROMA_COLLECTION', 'spider-schemas'))
         self.client = chromadb.PersistentClient(path=db_path)
-        self.collection = self.client.get_collection(collection_name)
+        self.collection = self.client.get_collection(
+            collection_name,
+            embedding_function=EmbeddingModel()
+        )
         self.n_results = n_results
 
         data_path = os.environ.get('SCHEMA_PATH', 'table_schemas.jsonl')
         with open(data_path) as f:
             self.source = f.readlines()
 
-        self.embedding_model = EmbeddingModel()
-
     def _run(self, question: str) -> str:
         results = self.collection.query(
-            query_embeddings=self.embedding_model.get_embedding(question),
+            query_texts=question,
             n_results=self.n_results,
         )
         return '\n'.join([self.source[int(id)] for id in results['ids'][0]])

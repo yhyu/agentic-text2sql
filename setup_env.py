@@ -6,7 +6,6 @@ import zipfile
 from pathlib import Path
 
 import chromadb
-import numpy as np
 
 from embedding import EmbeddingModel
 
@@ -16,10 +15,10 @@ def download_spider(download_path: str = 'spider') -> None:
     download_file = os.path.join(download_path, 'spider.zip')
     urllib.request.urlretrieve(down_url, download_file)
     with zipfile.ZipFile(download_file) as zipf:
-        zipf.extractall()
+        zipf.extractall(download_path)
 
 
-def collect_schemas(data_path: str = 'spider') -> None:
+def collect_schemas(data_path: str = 'spider/spider') -> None:
     tables = []
     database_path = os.path.join(data_path, 'database')
     for db_name in os.listdir(database_path):
@@ -49,27 +48,24 @@ def create_chromadb(
         db_path: str = 'chroma_db',
         collection_name: str = 'spider-schemas',
     ) -> None:
-    # generate schema embeddings
-    embedding_model = EmbeddingModel()
-    table_embeddings = None
+    tables = []
     with open(data_file) as f:
-        for line in f:
-            embeddings = embedding_model.get_embedding(line)
-            if table_embeddings is None:
-                table_embeddings = embeddings
-            else:
-                table_embeddings = np.concatenate((table_embeddings, embeddings), axis=0)
+        tables = f.readlines()
 
     # import embeddings to chromadb
     client = chromadb.PersistentClient(path=db_path)
-    collection = client.create_collection(collection_name, metadata={'hnsw:space': 'ip'})
+    collection = client.create_collection(
+        collection_name,
+        metadata={'hnsw:space': 'ip'},
+        embedding_function=EmbeddingModel()
+    )
     collection.add(
-        ids=[str(i) for i in range(table_embeddings.shape[0])], embeddings=table_embeddings)
+        ids=[str(i) for i in range(len(tables))], documents=tables)
 
 
 if __name__ == "__main__":
     # download spider dataset
-    print('download spider dataset...')
+    print('download spider dataset...(it may take a few minutes.)')
     download_spider()
 
     # collect spider table schemas
