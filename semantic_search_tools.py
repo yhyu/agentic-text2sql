@@ -2,15 +2,12 @@ import os
 from typing import Any, List
 
 import chromadb
-from crewai_tools import BaseTool
+from pydantic import BaseModel
 
 from embedding import EmbeddingModel
 
 
-class SemanticSearchTool(BaseTool):
-    name: str ="Search database and table schemas tool"
-    description: str = ("Useful to search database and table schemas from vector DB, "
-                        "about a given question and return relevant database andtable schemas")
+class SemanticSearchTool(BaseModel):
     client: Any = None
     collection: Any = None
     tokenizer: Any = None
@@ -33,7 +30,7 @@ class SemanticSearchTool(BaseTool):
         with open(data_path) as f:
             self.source = f.readlines()
 
-    def _run(self, question: str) -> str:
+    def __call__(self, question: str) -> str:
         results = self.collection.query(
             query_texts=question,
             n_results=self.n_results,
