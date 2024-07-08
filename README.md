@@ -26,5 +26,5 @@ python setup_env.py
 ```
 
 ## Try it out
-CrewAI: try [text2sql_crewai](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_crewai.ipynb) notebook.
-AutoGen: try [text2sql_autogen](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_autogen.ipynb) notebook.
+* CrewAI: try [text2sql_crewai](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_crewai.ipynb) notebook.
+* AutoGen: try [text2sql_autogen](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_autogen.ipynb) notebook.
