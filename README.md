@@ -2,7 +2,7 @@
 The experiment try to answer open domain business questions described in natural language through SQL queries to retrieve data from business databases.
 
 ## Prerequisites
-- The experiment leverage [CrewAI](https://www.crewai.com/) and [AutoGen](https://microsoft.github.io/autogen/) framework to build the agentic RAG pipeline.
+- The experiment leverage [CrewAI](https://www.crewai.com/), [AutoGen](https://microsoft.github.io/autogen/) and [LangChain - LangGraph](https://www.langchain.com/langgraph) frameworks to build the agentic RAG pipeline.
 - [Spider](https://yale-lily.github.io/spider) dataset is used to test the pipeline.
 - [Chroma](https://www.trychroma.com/) is used as a vector database.
 - Text embedding model: [gte-large-en-v1.5](https://huggingface.co/Alibaba-NLP/gte-large-en-v1.5). (Chroma also supports default built-in text embedding model which is [SentenceTransformer](https://www.sbert.net/) all-MiniLM-L6-v2 model.)
@@ -20,6 +20,11 @@ Install packages for AutoGen experiment.
 pip install --no-cache-dir -r requirements/autogen.txt
 ```
 
+Install packages for LangGraph experiment.
+```
+pip install --no-cache-dir -r requirements/langgraph.txt
+```
+
 Setup environment.
 ```
 python setup_env.py
@@ -28,3 +33,4 @@ python setup_env.py
 ## Try it out
 * CrewAI: try [text2sql_crewai](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_crewai.ipynb) notebook.
 * AutoGen: try [text2sql_autogen](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_autogen.ipynb) notebook.
+* LangGraph: try [text2sql_langgraph](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_langgraph.ipynb) notebook.
