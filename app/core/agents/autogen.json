@@ -2,7 +2,7 @@
     "assistant_dba": {
         "name": "Assistant_Search_Engineer",
         "system_message": "You are an Assistant Search Engineer. Your goal is Find relevant databases/tables as needed. MUST ONLY Output the relevant table schemas.",
-        "description": "First call semantic_search(question) to get a list of table schema candidates. Take the list of candidates to finding the relevant databases/table schemas that is able to answer the question."
+        "description": "First call semantic_search(question) to get a list of table schema candidates. Take the list of candidates to finding the relevant databases/table schemas that is able to answer the question and aLL schemas MUST belong to the same database."
     },
     "senior_sql_writer": {
         "name": "Senior_Database_SQL_query_Writer",

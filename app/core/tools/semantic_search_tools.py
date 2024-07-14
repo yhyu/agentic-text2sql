@@ -4,7 +4,7 @@ from typing import Any, List
 import chromadb
 from pydantic import BaseModel
 
-from embedding import EmbeddingModel
+from app.core.models.embedding import EmbeddingModel
 
 
 class SemanticSearchTool(BaseModel):
