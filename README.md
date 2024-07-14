@@ -34,3 +34,87 @@ python setup_env.py
 * CrewAI: try [text2sql_crewai](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_crewai.ipynb) notebook.
 * AutoGen: try [text2sql_autogen](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_autogen.ipynb) notebook.
 * LangGraph: try [text2sql_langgraph](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_langgraph.ipynb) notebook.
+
+## Mutli-turns Agentic RAG
+The multi-turns experiment is served by [FastAPI](https://fastapi.tiangolo.com/), you can also use other framworks that you familiar with.  
+Before you launch the service, install required packages:
+```
+pip install --no-cache-dir -r requirements/fastapi.txt
+```
+
+Run the command to start the multi-turns agentic RAG service:
+```
+chmod a+x run_multiturns.sh
+./run_multiturns.sh
+```
+
+### Multi-turns Request and Response
+In the multi-turns agentic RAG, __session_id__ is used to track conversations. __session_id__ is created in the first response, succeeded requests have to use the same __session_id__ to identify the same conversation. For instance:  
+First request:
+```
+curl -X POST  http://127.0.0.1:8000/v1/rag/query \
+-H 'accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+"request_id": "1234",
+"query": "How many routes does American Airlines operate?"
+}'
+```
+First response:
+```json
+{
+    "request_id":"1234",
+    "response_id":"e6e6526dc6024e9fb988898a56e9d3a6",
+    "results":{
+        "database":"flight_4",
+        "sql":"SELECT COUNT(*) AS total_routes\nFROM routes\nWHERE alid = (SELECT alid FROM airlines WHERE name = 'American Airlines');"
+    },
+    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+}
+```
+Second request:
+```
+curl -X POST  http://127.0.0.1:8000/v1/rag/query \
+-H 'accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+"request_id": "2234",
+"query": "How about Ryanair?",
+"session_id": "fa9ddb1ee7c440318ab1bb25bf7999ee"
+}'
+```
+Second response:
+```json
+{
+    "request_id":"2234",
+    "response_id":"c8b4e665bf484389a81b6ee471d02bfc",
+    "results":{
+        "database":"flight_4","sql":
+        "SELECT COUNT(*) AS total_routes\nFROM routes\nJOIN airlines ON routes.alid = airlines.alid\nWHERE airlines.name = 'Ryanair';"
+    },
+    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+}
+```
+Third request:
+```
+curl -X POST  http://127.0.0.1:8000/v1/rag/query \
+-H 'accept: application/json' \
+-H 'Content-Type: application/json' \
+-d '{
+"request_id": "3234",
+"query": "What is the country of the former?",
+"session_id": "fa9ddb1ee7c440318ab1bb25bf7999ee"
+}'
+```
+Third response:
+```json
+{
+    "request_id":"3234",
+    "response_id":"46b7b1df6eff494bb992955dd43657dd",
+    "results":{
+        "database":"flight_4",
+        "sql":"SELECT country\nFROM airlines\nWHERE name = 'American Airlines';"
+    },
+    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+}
+```
