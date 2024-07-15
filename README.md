@@ -50,6 +50,8 @@ export OPENAI_API_KEY="your-openai-api-key"
 ```
 
 ### Multi-turns Request and Response
+The multi-turns experiment is created using [LangGraph](https://www.langchain.com/langgraph) framework. Here is the graph looks like.  
+[Multi-turns Agentic RAG](https://github.com/yhyu/agentic-text2sql/blob/main/graph.png?raw=true)
 In the multi-turns agentic RAG, __session_id__ is used to track conversations. __session_id__ is created in the first response, succeeded requests have to use the same __session_id__ to identify the same conversation. For instance:  
 First request:
 ```
