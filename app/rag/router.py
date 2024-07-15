@@ -9,6 +9,7 @@ from app.rag.models import (
     QueryRequest, QueryResponse,
     SQLQueryResult,
 )
+from app.rag.utils import fetch_sqlite
 
 router = APIRouter()
 
@@ -27,12 +28,15 @@ async def query(
 ):
     g = Graph()
     ret = g(request.query, thread_id=request.session_id)
+    db = ret['state']['database'][-1]
+    sql = ret['state']['sql'][-1]
     response = QueryResponse(
         request_id=request.request_id,
         response_id=str(guid().hex),
         results=SQLQueryResult(
-            database=ret['state']['database'][-1],
-            sql=ret['state']['sql'][-1]
+            database=db,
+            sql=sql,
+            value=fetch_sqlite(db, sql)
         ),
         session_id=ret['thread_id']
     )

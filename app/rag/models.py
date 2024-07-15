@@ -1,10 +1,11 @@
-from typing import Any, Optional
+from typing import Any, List, Optional
 from pydantic import BaseModel
 
 
 class SQLQueryResult(BaseModel):
     database: str
     sql: str
+    value: Optional[List[Any]] = []
 
 
 class HealthCheckResponse(BaseModel):

@@ -45,6 +45,7 @@ pip install --no-cache-dir -r requirements/fastapi.txt
 Run the command to start the multi-turns agentic RAG service:
 ```
 chmod a+x run_multiturns.sh
+export OPENAI_API_KEY="your-openai-api-key"
 ./run_multiturns.sh
 ```
 
@@ -64,12 +65,13 @@ First response:
 ```json
 {
     "request_id":"1234",
-    "response_id":"e6e6526dc6024e9fb988898a56e9d3a6",
+    "response_id":"c56f90ccf67544a4b25c8290432e90d0",
     "results":{
         "database":"flight_4",
-        "sql":"SELECT COUNT(*) AS total_routes\nFROM routes\nWHERE alid = (SELECT alid FROM airlines WHERE name = 'American Airlines');"
+        "sql":"SELECT COUNT(*) AS total_routes\nFROM routes\nWHERE alid = (SELECT alid FROM airlines WHERE name = 'American Airlines');",
+        "value":[[2352]]
     },
-    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+    "session_id":"c56f90ccf67544a4b25c8290432e90d0"
 }
 ```
 Second request:
@@ -80,19 +82,20 @@ curl -X POST  http://127.0.0.1:8000/v1/rag/query \
 -d '{
 "request_id": "2234",
 "query": "How about Ryanair?",
-"session_id": "fa9ddb1ee7c440318ab1bb25bf7999ee"
+"session_id": "c56f90ccf67544a4b25c8290432e90d0"
 }'
 ```
 Second response:
 ```json
 {
-    "request_id":"2234",
-    "response_id":"c8b4e665bf484389a81b6ee471d02bfc",
+    "request_id":"1234",
+    "response_id":"361039f19e4d4b45957b0e2f413a1ba2",
     "results":{
-        "database":"flight_4","sql":
-        "SELECT COUNT(*) AS total_routes\nFROM routes\nJOIN airlines ON routes.alid = airlines.alid\nWHERE airlines.name = 'Ryanair';"
+        "database":"flight_4",
+        "sql":"SELECT COUNT(*) AS total_routes\nFROM routes\nJOIN airlines ON routes.alid = airlines.alid\nWHERE airlines.name = 'Ryanair';",
+        "value":[[2484]]
     },
-    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+    "session_id":"c56f90ccf67544a4b25c8290432e90d0"
 }
 ```
 Third request:
@@ -103,18 +106,19 @@ curl -X POST  http://127.0.0.1:8000/v1/rag/query \
 -d '{
 "request_id": "3234",
 "query": "What is the country of the former?",
-"session_id": "fa9ddb1ee7c440318ab1bb25bf7999ee"
+"session_id": "c56f90ccf67544a4b25c8290432e90d0"
 }'
 ```
 Third response:
 ```json
 {
-    "request_id":"3234",
-    "response_id":"46b7b1df6eff494bb992955dd43657dd",
+    "request_id":"1234",
+    "response_id":"259e86c55bee46c690a1c7b8d961d255",
     "results":{
         "database":"flight_4",
-        "sql":"SELECT country\nFROM airlines\nWHERE name = 'American Airlines';"
+        "sql":"SELECT country\nFROM airlines\nWHERE name = 'American Airlines';",
+        "value":[["United States"]]
     },
-    "session_id":"fa9ddb1ee7c440318ab1bb25bf7999ee"
+    "session_id":"c56f90ccf67544a4b25c8290432e90d0"
 }
 ```
