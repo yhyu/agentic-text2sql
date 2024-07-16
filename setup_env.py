@@ -7,7 +7,7 @@ from pathlib import Path
 
 import chromadb
 
-from embedding import EmbeddingModel
+from app.core.models.embedding import EmbeddingModel
 
 def download_spider(download_path: str = 'spider') -> None:
     Path(download_path).mkdir(parents=True, exist_ok=True)
