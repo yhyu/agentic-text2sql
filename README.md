@@ -36,6 +36,9 @@ python setup_env.py
 * LangGraph: try [text2sql_langgraph](https://github.com/yhyu/agentic-text2sql/blob/main/text2sql_langgraph.ipynb) notebook.
 
 ## Mutli-turns Agentic RAG
+The multi-turns experiment is created using [LangGraph](https://www.langchain.com/langgraph) framework. Here is the graph looks like.  
+![Multi-turns Agentic RAG](https://github.com/yhyu/agentic-text2sql/blob/main/graph.png)  
+
 The multi-turns experiment is served by [FastAPI](https://fastapi.tiangolo.com/), you can also use other framworks that you familiar with.  
 Before you launch the service, install required packages:
 ```
@@ -50,8 +53,6 @@ export OPENAI_API_KEY="your-openai-api-key"
 ```
 
 ### Multi-turns Request and Response
-The multi-turns experiment is created using [LangGraph](https://www.langchain.com/langgraph) framework. Here is the graph looks like.  
-![Multi-turns Agentic RAG](https://github.com/yhyu/agentic-text2sql/blob/main/graph.png)  
 In the multi-turns agentic RAG, __session_id__ is used to track conversations. __session_id__ is created in the first response, succeeded requests have to use the same __session_id__ to identify the same conversation. For instance:  
 First request:
 ```
