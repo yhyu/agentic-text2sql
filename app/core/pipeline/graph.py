@@ -5,9 +5,11 @@ from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 
 from app.core.agents.agents import Agent, AgentState
+from app.core.configs.config import logger
+from app.core.utils import Singleton
 
 
-class Graph():
+class Graph(metaclass=Singleton):
 
     graph = None
     builder = None
@@ -50,8 +52,7 @@ class Graph():
             thread = {"configurable": {"thread_id": thread_id}}
 
         for s in self.graph.stream(init_state, thread):
-            # logger(Info, s)
-            print(s)
+            logger.debug(s)
         return {
             'state': self.graph.get_state(thread).values,
             'thread_id': thread_id if self.graph.get_state(thread).next else ''

@@ -13,3 +13,4 @@ langchain_core==0.2.12
 langchain_openai==0.1.7
 langchain==0.2.7
 chromadb==0.4.24
+pydantic-settings==2.3.4

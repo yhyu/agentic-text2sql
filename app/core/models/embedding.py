@@ -7,11 +7,12 @@ import torch.nn.functional as F
 from transformers import AutoModel, AutoTokenizer
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
+from app.core.configs.config import settings
+
 
 class EmbeddingModel(EmbeddingFunction):
-    model_name = os.environ.get('EMBEDDING_MODEL', 'Alibaba-NLP/gte-large-en-v1.5')
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(settings.EMBEDDING_MODEL)
+    model = AutoModel.from_pretrained(settings.EMBEDDING_MODEL, trust_remote_code=True)
 
     def __call__(self, input: Documents) -> Embeddings:
         return self.get_embedding(input)

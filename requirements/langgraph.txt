@@ -10,3 +10,4 @@ langchain_openai==0.1.7
 langchain-community==0.2.7
 langchain==0.2.7
 pygraphviz==1.13
+pydantic-settings==2.3.4

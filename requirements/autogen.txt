@@ -5,3 +5,4 @@ requests==2.32.3
 pyautogen==0.2.32
 chromadb==0.4.24
 spider_env==0.0.1
+pydantic-settings==2.3.4

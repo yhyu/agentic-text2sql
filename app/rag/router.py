@@ -3,6 +3,7 @@ from uuid import uuid4 as guid
 
 from fastapi import APIRouter, BackgroundTasks, Header
 
+from app.core.configs.config import logger
 from app.core.pipeline.graph import Graph
 from app.rag.models import (
     HealthCheckResponse,
@@ -26,6 +27,7 @@ async def query(
     request: QueryRequest,
     background_tasks: BackgroundTasks,
 ):
+    logger.info(f'query request: {request}')
     g = Graph()
     ret = g(request.query, thread_id=request.session_id)
     db = ret['state']['database'][-1]
@@ -40,4 +42,5 @@ async def query(
         ),
         session_id=ret['thread_id']
     )
+    logger.info(f'query response: {response}')
     return response

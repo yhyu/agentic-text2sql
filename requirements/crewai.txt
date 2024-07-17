@@ -6,3 +6,4 @@ crewai==0.36.1
 crewai-tools==0.4.8
 chromadb==0.4.24
 spider_env==0.0.1
+pydantic-settings==2.3.4
