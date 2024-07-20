@@ -5,6 +5,7 @@ from typing import TypedDict, List
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AnyMessage
 
+from app.core.configs.config import settings
 from app.core.tools.semantic_search_tools import SemanticSearchTool
 
 class AgentState(TypedDict):
@@ -25,7 +26,7 @@ class Agent():
             self, config_file: str = os.path.join(os.path.dirname(__file__), 'agents.json')) -> None:
         with open(config_file) as f:
             self.agent_config = json.load(f)
-        self.llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        self.llm = ChatOpenAI(model=settings.OPENAI_MODEL_NAME, temperature=0)
         self.semantic_search = SemanticSearchTool(n_results=10)
 
     def search_engineer_node(self, state: AgentState):
