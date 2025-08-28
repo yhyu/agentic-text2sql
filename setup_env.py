@@ -11,14 +11,14 @@ from app.core.models.embedding import EmbeddingModel
 
 def download_spider(download_path: str = 'spider') -> None:
     Path(download_path).mkdir(parents=True, exist_ok=True)
-    down_url = 'https://drive.usercontent.google.com/download?id=1iRDVHLr4mX2wQKSgA9J8Pire73Jahh0m&export=download&authuser=0&confirm=t&uuid=c3bf75f4-055a-4d70-ba8f-c8cd3992f243&at=APZUnTVUgg2SMNCakypzoELhWIIc%3A1719561987956'
+    down_url = 'https://drive.usercontent.google.com/download?id=1403EGqzIDoHMdQF4c9Bkyl7dZLZ5Wt6J&export=download&authuser=0&confirm=t&uuid=2252606e-782f-4804-8c83-242531f05358&at=AN8xHooFMDH4YaulsljxCkqKhxAd%3A1756365050863'
     download_file = os.path.join(download_path, 'spider.zip')
     urllib.request.urlretrieve(down_url, download_file)
     with zipfile.ZipFile(download_file) as zipf:
         zipf.extractall(download_path)
 
 
-def collect_schemas(data_path: str = 'spider/spider') -> None:
+def collect_schemas(data_path: str = 'spider/spider_data') -> None:
     tables = []
     database_path = os.path.join(data_path, 'database')
     for db_name in os.listdir(database_path):
